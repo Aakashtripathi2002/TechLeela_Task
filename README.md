@@ -101,6 +101,9 @@ CREATE TABLE tasks (
 📧 Email Notification
 Whenever an admin assigns a task to a user, the assigned user receives an email notification containing task details.
 The system uses Nodemailer with the credentials specified in your .env file.
+For this you have to enable the two-step verification in your gogle account and have to generate google app 
+with project name and password use that mail and password in env file
+
 
 🧪 Testing via Postman
 After completing setup and running both backend and frontend servers:
