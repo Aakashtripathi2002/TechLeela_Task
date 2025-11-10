@@ -32,6 +32,25 @@ const loginSchema = Joi.object({
 });
 
 
+export const adminRegister = async (req, res) => {
+  try {
+    const { error, value } = registerSchema.validate(req.body);
+    if (error) return res.status(400).json({ message: error.details[0].message });
+
+    const { name, email, password } = value;
+
+    const [existing] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+    if (existing.length) return res.status(400).json({ message: "Email already exists" });
+
+    const hashed = await bcrypt.hash(password, 10);
+    await db.query("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)", [name, email, hashed, "admin"]);
+    res.json({ message: "Admin registered successfully" });
+  } catch (err) {
+    console.error("Registration error:", err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
 
 export const register = async (req, res) => {
   try {
